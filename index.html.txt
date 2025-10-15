@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鞍魚定食 AnYu LearnHub | 教育共學平台企劃</title>
+    <!-- 載入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 設定字體為 Inter (或選擇一個中文友好的字體組合) */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            background-color: #fcfcfc; /* 接近白色的底色 */
+        }
+        /* 自定義顏色，讓網站更貼近「定食」的溫暖與新鮮感 */
+        .color-primary { color: #1E40AF; } /* Deep Blue */
+        .bg-brand { background-color: #FBBF24; } /* Warm Yellow/Amber */
+        .text-brand { color: #059669; } /* Fresh Green */
+        .border-brand { border-color: #FBBF24; }
+
+        /* 隱藏預設的頁面捲軸，讓SPA切換更流暢 */
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- 頂部導航列 (固定在頂部) -->
+    <nav class="bg-white shadow-lg fixed w-full z-20 top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold color-primary cursor-pointer" onclick="renderView('home')">AnYu LearnHub</span>
+                </div>
+                <div class="flex items-center space-x-2 md:space-x-4 text-sm font-medium">
+                    <button onclick="renderView('home')" class="py-2 px-2 hover:text-brand transition duration-150">企劃總覽</button>
+                    <button onclick="renderView('video')" class="py-2 px-2 hover:text-brand transition duration-150">影片區</button>
+                    <button onclick="renderView('exchange')" class="py-2 px-2 hover:text-brand transition duration-150">交流區</button>
+                    <button onclick="renderView('wish')" class="py-2 px-2 hover:text-brand transition duration-150">許願牆</button>
+                    <button onclick="renderView('points')" class="py-2 px-2 hover:text-brand transition duration-150">點數中心</button>
+                    <button onclick="renderView('action')" class="py-2 px-2 hover:text-brand transition duration-150 bg-brand text-white rounded-full">地方行動</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要內容區 - SPA 內容會切換在這裡 -->
+    <div id="app-content" class="pt-16">
+        <!-- 內容由 JavaScript 渲染 -->
+    </div>
+
+    <!-- 頁腳 (Footer) -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <p class="text-xl font-bold mb-2">鞍魚定食 AnYu LearnHub</p>
+            <p class="text-sm text-gray-400">&copy; 2025. All Rights Reserved. 願景：從「有魚吃」到「學會釣魚」。</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript 負責 SPA 路由與介面渲染 -->
+    <script>
+        // --- 介面模擬的 HTML 模板 ---
+
+        const views = {
+            'home': `
+                <!-- 區塊 I: 企劃概要 & 核心理念 (Hero Section) -->
+                <section id="overview" class="relative overflow-hidden pt-12 lg:pt-24 pb-20 bg-amber-50">
+                    <div class="absolute top-0 right-0 w-48 h-48 bg-brand opacity-10 rounded-full blur-3xl hidden md:block"></div>
+                    <div class="absolute bottom-0 left-0 w-64 h-64 bg-green-200 opacity-10 rounded-full blur-3xl hidden md:block"></div>
+
+                    <div class="max-w-6xl mx-auto px-6 text-center z-10 relative">
+                        <p class="text-sm font-semibold tracking-widest uppercase text-brand mb-3">教育平權 × 數位共學 × 地方創生</p>
+                        <h1 class="text-5xl md:text-7xl font-extrabold color-primary leading-tight mb-4">
+                            鞍魚定食 AnYu LearnHub
+                        </h1>
+                        <p class="text-xl md:text-2xl font-light text-gray-600 mb-8 max-w-4xl mx-auto">
+                            我們的核心理念：不只給你魚，我們給你魚竿。調出好時光，學出新滋味！
+                        </p>
+                        <div class="bg-white p-6 md:p-10 rounded-3xl shadow-xl max-w-4xl mx-auto mt-12 border-4 border-brand">
+                            <h2 class="text-2xl md:text-3xl font-bold text-gray-700 mb-4">願景：從「有魚吃」到「學會釣魚」</h2>
+                            <p class="lg:text-lg leading-relaxed text-gray-600">
+                                鞍魚定食致力於讓每個孩子都能品嚐到平等而有滋味的學習。我們相信，真正的教育平權是授人以漁，讓孩子學會自主探索知識、主動發起交流，並將所學應用到家鄉，用手中的魚竿創造無限可能。
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 區塊 III: 企劃目標 (Objectives) -->
+                <section id="objectives" class="py-20 bg-indigo-50">
+                    <div class="max-w-6xl mx-auto px-6">
+                        <h2 class="text-3xl font-bold text-center color-primary mb-12">三大企劃目標：打造孩子專屬的數位魚竿</h2>
+                        <div class="grid md:grid-cols-3 gap-8">
+                            <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-indigo-500">
+                                <span class="text-4xl text-indigo-500 mb-4 block">🎣</span>
+                                <h3 class="text-xl font-bold mb-3 color-primary">1. 共享資源（平等的漁場）</h3>
+                                <p class="text-gray-600 text-sm">建立跨地區共學平台，讓所有學生都能在同一個優質的「漁場」中學習。</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-brand">
+                                <span class="text-4xl text-brand mb-4 block">💡</span>
+                                <h3 class="text-xl font-bold mb-3 color-primary">2. 內化能力（學會用魚竿）</h3>
+                                <p class="text-gray-600 text-sm">透過心得發表與點數制度，讓學生從被動接收者轉為主動探索者，真正掌握學習工具。</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-green-500">
+                                <span class="text-4xl text-green-500 mb-4 block">🏘️</span>
+                                <h3 class="text-xl font-bold mb-3 color-primary">3. 改變家鄉（在當地漁獵）</h3>
+                                <p class="text-gray-600 text-sm">鼓勵學生將學到的知識與方法，應用於家鄉的議題，用魚竿改變自己的環境。</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 區塊 VI: 平台架構 (System Architecture) & 導航 CTA -->
+                <section id="architecture" class="py-20 bg-indigo-700">
+                    <div class="max-w-5xl mx-auto px-6 text-white">
+                        <h2 class="text-3xl font-bold text-center mb-10">平台架構一覽：點擊進入各介面</h2>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 text-center">
+                            <button onclick="renderView('home')" class="bg-indigo-800 p-4 rounded-lg font-semibold shadow-md hover:bg-indigo-600 transition duration-200">首頁（理念展示＋功能入口）</button>
+                            <button onclick="renderView('video')" class="bg-indigo-800 p-4 rounded-lg font-semibold shadow-md hover:bg-indigo-600 transition duration-200">教學影片區（課程瀏覽＋播放）</button>
+                            <button onclick="renderView('exchange')" class="bg-indigo-800 p-4 rounded-lg font-semibold shadow-md hover:bg-indigo-600 transition duration-200">心得交流區（貼文流＋互動）</button>
+                            <button onclick="renderView('wish')" class="bg-indigo-800 p-4 rounded-lg font-semibold shadow-md hover:bg-indigo-600 transition duration-200">許願牆（投票＋排行）</button>
+                            <button onclick="renderView('points')" class="bg-indigo-800 p-4 rounded-lg font-semibold shadow-md hover:bg-indigo-600 transition duration-200">點數中心（任務＋兌換）</button>
+                            <button onclick="renderView('action')" class="bg-indigo-800 p-4 rounded-lg font-semibold shadow-md hover:bg-indigo-600 transition duration-200">地方創生專區（行動牆＋作品展示）</button>
+                        </div>
+                        <div class="text-center mt-16">
+                            <h3 class="text-2xl font-bold mb-4">聯繫我們，開始行動！</h3>
+                            <a href="mailto:contact@anyulearnhub.com" class="inline-block bg-brand py-3 px-8 rounded-full text-indigo-900 font-extrabold text-lg hover:bg-yellow-500 transition duration-300 shadow-xl">
+                                立即發起合作
+                            </a>
+                        </div>
+                    </div>
+                </section>
+            `,
+            'video': `
+                <section class="py-16 md:py-24 bg-red-50 min-h-screen">
+                    <div class="max-w-6xl mx-auto px-6">
+                        <h2 class="text-4xl font-bold text-center color-primary mb-4">🎥 線上教學影片區 (課程瀏覽)</h2>
+                        <p class="text-center text-lg text-gray-600 mb-12">功能意義：打破地理限制，提供平等的「學習原料」。</p>
+
+                        <div class="bg-white p-6 md:p-10 rounded-xl shadow-lg border-t-4 border-red-500">
+                            <div class="flex flex-col md:flex-row mb-6 items-center justify-between">
+                                <input type="text" placeholder="🔍 搜尋課程名稱、老師或主題..." class="flex-grow p-3 border border-gray-300 rounded-lg mr-4 focus:ring-red-500 focus:border-red-500" />
+                                <select class="p-3 border border-gray-300 rounded-lg w-full md:w-auto mt-4 md:mt-0">
+                                    <option>主題分類：全部</option>
+                                    <option>數學邏輯</option>
+                                    <option>自然科學</option>
+                                    <option>地方文史</option>
+                                </select>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-3 gap-6">
+                                <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+                                    <div class="h-32 bg-red-200 rounded-md mb-3 flex items-center justify-center text-red-700">播放視窗模擬</div>
+                                    <p class="font-bold text-lg mb-1">【數學】分數的魔法世界</p>
+                                    <p class="text-sm text-gray-600">授課老師：陳大為老師 | 觀看次數：1.2K</p>
+                                    <button class="w-full mt-3 bg-red-500 text-white p-2 rounded-lg hover:bg-red-600">開始學習</button>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+                                    <div class="h-32 bg-red-200 rounded-md mb-3 flex items-center justify-center text-red-700">播放視窗模擬</div>
+                                    <p class="font-bold text-lg mb-1">【地方】我家鄉的燈塔故事</p>
+                                    <p class="text-sm text-gray-600">授課老師：王小明老師 | 觀看次數：850</p>
+                                    <button class="w-full mt-3 bg-red-500 text-white p-2 rounded-lg hover:bg-red-600">開始學習</button>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+                                    <div class="h-32 bg-red-200 rounded-md mb-3 flex items-center justify-center text-red-700">播放視窗模擬</div>
+                                    <p class="font-bold text-lg mb-1">【自然】生態瓶裡的微型宇宙</p>
+                                    <p class="text-sm text-gray-600">授課老師：林佩珊老師 | 觀看次數：990</p>
+                                    <button class="w-full mt-3 bg-red-500 text-white p-2 rounded-lg hover:bg-red-600">開始學習</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `,
+            'exchange': `
+                <section class="py-16 md:py-24 bg-green-50 min-h-screen">
+                    <div class="max-w-4xl mx-auto px-6">
+                        <h2 class="text-4xl font-bold text-center color-primary mb-4">💬 心得交流區 (釣魚夥伴)</h2>
+                        <p class="text-center text-lg text-gray-600 mb-12">功能意義：建立學習社群，透過互相回饋強化反思能力。</p>
+
+                        <!-- 發布心得區 -->
+                        <div class="bg-white p-6 rounded-xl shadow-lg mb-8 border-t-4 border-green-500">
+                            <textarea placeholder="發布你的學習心得、疑問或分享！（會獲得點數喔！）" rows="3" class="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-green-500 focus:border-green-500"></textarea>
+                            <div class="flex justify-between items-center mt-3">
+                                <button class="text-sm text-gray-500 hover:text-green-600">🔗 附加圖片/影片</button>
+                                <button class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition">發布心得</button>
+                            </div>
+                        </div>
+
+                        <!-- 貼文流 (Feed) -->
+                        <div class="space-y-6">
+                            <!-- 貼文 1 -->
+                            <div class="bg-white p-6 rounded-xl shadow-md">
+                                <div class="flex items-center mb-4">
+                                    <span class="w-10 h-10 bg-indigo-200 rounded-full flex items-center justify-center text-indigo-700 mr-3">A</span>
+                                    <div>
+                                        <p class="font-semibold text-gray-800">偏鄉小魚兒</p>
+                                        <p class="text-xs text-gray-500">3 小時前 | 觀看完【分數的魔法】</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-700 mb-4">以前覺得分數超難，但陳老師用披薩🍕切塊比喻後，突然就懂了！感謝老師的分享！大家還有其他課程推薦嗎？</p>
+                                <div class="flex justify-between text-gray-500 text-sm">
+                                    <button class="flex items-center hover:text-red-500">❤️ 讚 (58)</button>
+                                    <button class="flex items-center hover:text-green-500">💬 留言 (12)</button>
+                                    <button class="flex items-center hover:text-yellow-500">💰 給點數 (+10)</button>
+                                </div>
+                            </div>
+                            <!-- 貼文 2 -->
+                            <div class="bg-white p-6 rounded-xl shadow-md">
+                                <div class="flex items-center mb-4">
+                                    <span class="w-10 h-10 bg-amber-200 rounded-full flex items-center justify-center text-amber-700 mr-3">B</span>
+                                    <div>
+                                        <p class="font-semibold text-gray-800">城市探索家</p>
+                                        <p class="text-xs text-gray-500">1 天前 | 在地方創生專區</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-700 mb-4">我們地方團隊成功發起了「老街文史口述」任務，已經採訪了三位耆老！超有成就感！歡迎大家來看看我們的作品！</p>
+                                <div class="flex justify-between text-gray-500 text-sm">
+                                    <button class="flex items-center hover:text-red-500">❤️ 讚 (120)</button>
+                                    <button class="flex items-center hover:text-green-500">💬 留言 (35)</button>
+                                    <button class="flex items-center hover:text-yellow-500">💰 給點數 (+50)</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `,
+            'wish': `
+                <section class="py-16 md:py-24 bg-yellow-50 min-h-screen">
+                    <div class="max-w-4xl mx-auto px-6">
+                        <h2 class="text-4xl font-bold text-center color-primary mb-4">🌟 課程許願牆 (魚竿方向盤)</h2>
+                        <p class="text-center text-lg text-gray-600 mb-12">功能意義：讓學生主導學習方向，透過點數投票決定下一門新課程。</p>
+
+                        <!-- 許願功能區 -->
+                        <div class="bg-white p-6 rounded-xl shadow-lg mb-8 border-t-4 border-brand">
+                            <h3 class="text-xl font-bold color-primary mb-3">發起新的學習許願</h3>
+                            <input type="text" placeholder="輸入你想學的課程主題（例如：手機程式設計入門）" class="w-full p-3 border border-gray-300 rounded-lg mb-3 focus:ring-brand focus:border-brand" />
+                            <div class="flex justify-end">
+                                <button class="bg-brand text-white py-2 px-4 rounded-lg hover:bg-yellow-600 transition">發起許願 (-50 點數)</button>
+                            </div>
+                        </div>
+
+                        <!-- 許願清單 -->
+                        <h3 class="text-2xl font-bold color-primary mb-4">熱門許願排行</h3>
+                        <div class="space-y-4">
+                            <!-- 許願 1 -->
+                            <div class="bg-white p-4 rounded-xl shadow-md flex justify-between items-center border-l-4 border-red-500">
+                                <div>
+                                    <p class="text-lg font-semibold text-gray-800">1. 【程式設計】Scratch 遊戲開發教學</p>
+                                    <p class="text-sm text-gray-500">發起人：程式小學徒 | 目標點數：10000</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-2xl text-red-500 font-bold mb-1">9,200</p>
+                                    <button class="bg-red-500 text-white py-1 px-3 rounded-full text-sm hover:bg-red-600 transition">投點數支持 (+10)</button>
+                                </div>
+                            </div>
+                            <!-- 許願 2 -->
+                            <div class="bg-white p-4 rounded-xl shadow-md flex justify-between items-center border-l-4 border-green-500">
+                                <div>
+                                    <p class="text-lg font-semibold text-gray-800">2. 【語文】外國朋友的日常英文會話</p>
+                                    <p class="text-sm text-gray-500">發起人：英文苦手 | 目標點數：8000</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-2xl text-green-500 font-bold mb-1">6,500</p>
+                                    <button class="bg-green-500 text-white py-1 px-3 rounded-full text-sm hover:bg-green-600 transition">投點數支持 (+10)</button>
+                                </div>
+                            </div>
+                            <!-- 許願 3 -->
+                            <div class="bg-white p-4 rounded-xl shadow-md flex justify-between items-center border-l-4 border-indigo-500">
+                                <div>
+                                    <p class="text-lg font-semibold text-gray-800">3. 【藝術】用平板畫出Q版人物</p>
+                                    <p class="text-sm text-gray-500">發起人：繪畫宅 | 目標點數：5000</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-2xl text-indigo-500 font-bold mb-1">3,800</p>
+                                    <button class="bg-indigo-500 text-white py-1 px-3 rounded-full text-sm hover:bg-indigo-600 transition">投點數支持 (+10)</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `,
+            'points': `
+                <section class="py-16 md:py-24 bg-indigo-100 min-h-screen">
+                    <div class="max-w-5xl mx-auto px-6">
+                        <h2 class="text-4xl font-bold text-center color-primary mb-4">💰 點數中心 (主動誘因)</h2>
+                        <p class="text-center text-lg text-gray-600 mb-12">功能意義：透過即時回饋，培養學生的主動參與與回饋動機。</p>
+
+                        <!-- 點數儀表板 -->
+                        <div class="bg-indigo-700 text-white p-8 rounded-xl shadow-lg mb-10 text-center">
+                            <p class="text-lg mb-2">我的總點數餘額</p>
+                            <p class="text-6xl font-extrabold tracking-wider">1,450 <span class="text-2xl">點</span></p>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <!-- 賺取點數 (任務區) -->
+                            <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-green-500">
+                                <h3 class="text-2xl font-bold text-green-700 mb-4">✅ 賺取點數：今日任務</h3>
+                                <ul class="space-y-3">
+                                    <li class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                                        <span class="text-gray-700">觀看完一部新課程影片</span>
+                                        <button class="bg-green-500 text-white py-1 px-3 rounded-full text-sm">獎勵 +50 點</button>
+                                    </li>
+                                    <li class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                                        <span class="text-gray-700">在心得交流區留言一次</span>
+                                        <button class="bg-green-500 text-white py-1 px-3 rounded-full text-sm">獎勵 +10 點</button>
+                                    </li>
+                                    <li class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                                        <span class="text-gray-700">幫忙回答一個問題（被採納）</span>
+                                        <button class="bg-green-500 text-white py-1 px-3 rounded-full text-sm">獎勵 +20 點</button>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <!-- 兌換點數 (兌換區) -->
+                            <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-brand">
+                                <h3 class="text-2xl font-bold text-amber-700 mb-4">🛒 兌換中心：點數換好禮</h3>
+                                <ul class="space-y-3">
+                                    <li class="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
+                                        <span class="text-gray-700">文具組 (筆、筆記本)</span>
+                                        <button class="bg-brand text-indigo-900 py-1 px-3 rounded-full text-sm">兌換 500 點</button>
+                                    </li>
+                                    <li class="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
+                                        <span class="text-gray-700">精選課外讀物一本</span>
+                                        <button class="bg-brand text-indigo-900 py-1 px-3 rounded-full text-sm">兌換 800 點</button>
+                                    </li>
+                                    <li class="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
+                                        <span class="text-gray-700">獲得一次課程許願權</span>
+                                        <button class="bg-brand text-indigo-900 py-1 px-3 rounded-full text-sm">兌換 1500 點</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `,
+            'action': `
+                <section class="py-16 md:py-24 bg-teal-50 min-h-screen">
+                    <div class="max-w-6xl mx-auto px-6">
+                        <h2 class="text-4xl font-bold text-center color-primary mb-4">🌱 地方創生專區 (實戰演練)</h2>
+                        <p class="text-center text-lg text-gray-600 mb-12">功能意義：從學習走向行動，用魚竿改變自己的家鄉環境。</p>
+
+                        <!-- 發起行動 -->
+                        <div class="bg-white p-6 rounded-xl shadow-lg mb-8 border-t-4 border-teal-500">
+                            <h3 class="text-xl font-bold text-teal-700 mb-3">發起地方行動</h3>
+                            <input type="text" placeholder="輸入你想解決的家鄉問題或發起的任務" class="w-full p-3 border border-gray-300 rounded-lg mb-3 focus:ring-teal-500 focus:border-teal-500" />
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">任務完成後將獲得豐厚點數與獎勵！</span>
+                                <button class="bg-teal-500 text-white py-2 px-4 rounded-lg hover:bg-teal-600 transition">發起新任務</button>
+                            </div>
+                        </div>
+
+                        <!-- 進行中的任務列表 -->
+                        <h3 class="text-2xl font-bold color-primary mb-4">進行中的地方創生任務</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- 任務 1 -->
+                            <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-blue-500">
+                                <p class="text-sm text-blue-500 font-semibold mb-1">任務階段：招募中</p>
+                                <p class="text-xl font-bold text-gray-800 mb-2">🌳 【環保】守護我家鄉的海岸線</p>
+                                <p class="text-gray-700 text-sm mb-3">目標：每週六淨灘一次。目前進度：收集了 200 公斤垃圾。</p>
+                                <div class="flex justify-between items-center">
+                                    <p class="text-sm text-gray-500">已參與人數：15 人</p>
+                                    <button class="bg-blue-500 text-white py-1 px-3 rounded-full text-sm hover:bg-blue-600 transition">立即加入</button>
+                                </div>
+                            </div>
+                            <!-- 任務 2 -->
+                            <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-purple-500">
+                                <p class="text-sm text-purple-500 font-semibold mb-1">任務階段：資料收集</p>
+                                <p class="text-xl font-bold text-gray-800 mb-2">📜 【文史】繪製社區歷史地圖</p>
+                                <p class="text-gray-700 text-sm mb-3">目標：採訪十位耆老，記錄老地名與故事。目前進度：完成 5 次採訪。</p>
+                                <div class="flex justify-between items-center">
+                                    <p class="text-sm text-gray-500">已參與人數：8 人</p>
+                                    <button class="bg-purple-500 text-white py-1 px-3 rounded-full text-sm hover:bg-purple-600 transition">立即加入</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `
+        };
+
+        const appContent = document.getElementById('app-content');
+
+        /**
+         * 渲染指定的視圖內容到 app-content 區塊
+         * @param {string} viewName - 要渲染的視圖名稱 ('home', 'exchange', 'wish', 'points', 'action', 'video')
+         */
+        function renderView(viewName) {
+            const viewHtml = views[viewName] || views['home']; // 預設回首頁
+            appContent.innerHTML = viewHtml;
+
+            // 確保捲動到頁面頂部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 初始化：載入首頁視圖
+        window.onload = () => {
+            renderView('home');
+        };
+    </script>
+
+</body>
+</html>
